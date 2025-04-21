@@ -21,14 +21,18 @@ public class Cell {
 		this.down = down;
 	}
 
-	// GETTERS AND SETTERS 
+	// GETTERS AND SETTERS
 	
 	public CellComponents getLeft() {
 		return left;
 	}
 
 	public void setLeft(CellComponents left) {
-		this.left = left;
+		if (left == null) {		
+			this.left = CellComponents.WALL;
+		} else {
+			this.left = left;
+		}
 	}
 
 	public CellComponents getRight() {
@@ -36,7 +40,11 @@ public class Cell {
 	}
 
 	public void setRight(CellComponents right) {
-		this.right = right;
+		if (right == null) {
+			this.right = CellComponents.WALL;
+		} else {
+			this.right = right;
+		}
 	}
 
 	public CellComponents getUp() {
@@ -44,7 +52,11 @@ public class Cell {
 	}
 
 	public void setUp(CellComponents up) {
-		this.up = up;
+		if (up == null) {
+			this.up = CellComponents.WALL;
+		} else {
+			this.up = up;
+		}
 	}
 
 	public CellComponents getDown() {
@@ -52,7 +64,11 @@ public class Cell {
 	}
 
 	public void setDown(CellComponents down) {
-		this.down = down;
+		if (down == null) {
+			this.down = CellComponents.WALL;
+		} else {
+			this.down = down;
+		}
 	}
 
 	/**
