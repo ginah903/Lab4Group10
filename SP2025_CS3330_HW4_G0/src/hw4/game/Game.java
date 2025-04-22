@@ -1,6 +1,7 @@
 package hw4.game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import hw4.maze.*;
 import hw4.player.*;
@@ -97,27 +98,95 @@ public class Game {
 			return null;
 		}
 		
+		//randomg grid generator with internal error checking
 		ArrayList<Row> rows = new ArrayList<>();
+		Random rand = new Random();
+		
+		int exitRow = rand.nextInt(size);
 		
 		for (int i = 0; i <size; i++) {
 			ArrayList<Cell> cells = new ArrayList<>();
 			for (int j = 0; j < size; j++) {
-				Cell cell = new Cell(
-					CellComponents.WALL,
-					CellComponents.WALL,
-					CellComponents.WALL,
-					CellComponents.WALL
-				);
-				cells.add(cell);		
+					CellComponents left = CellComponents.WALL;
+					CellComponents right = CellComponents.WALL;
+					CellComponents up = CellComponents.WALL;
+					CellComponents down = CellComponents.WALL;
+			
+			//begin checking to see that all adjacent apertures match to each other
+			if (j == 0) {
+				left = (i == exitRow) ? CellComponents.EXIT : randomApertureOrWall(rand);
 			}
-			Row row = new Row(cells);
-			rows.add(row);
-		}
-		
-		int randomExitRow = (int)(Math.random() * size);
-		rows.get(randomExitRow).getCells().get(0).setLeft(CellComponents.EXIT);
-		
+			
+			else {
+				left = cells.get(j-1).getRight();
+			}
+			
+			if (i > 0) {
+				up = rows.get(i-1).getCells().get(j).getDown();
+			}
+			
+			if (j < size - 1) {
+                right = randomApertureOrWall(rand);
+            }
+
+            if (i < size - 1) {
+                down = randomApertureOrWall(rand);
+            }
+
+            //establishes error checking process for each cell
+            Cell newCell = new Cell(left, right, up, down);
+
+            //error/validity checking for at least one and no fully open cells (all apertures)
+            if (!hasAtLeastOneAperture(newCell) || hasAllApertures(newCell)) {
+                //if there is no aperture, then goes back and adds one randomly 
+                int side = rand.nextInt(4);
+                switch (side) {
+                    case 0: newCell.setLeft(CellComponents.APERTURE); break;
+                    case 1: newCell.setRight(CellComponents.APERTURE); break;
+                    case 2: newCell.setUp(CellComponents.APERTURE); break;
+                    case 3: newCell.setDown(CellComponents.APERTURE); break;
+                }
+            }
+
+            cells.add(newCell);
+			}
+        rows.add(new Row(cells));
+    }
+
 		return new Grid(rows);
+	}
+
+	/**
+	 * Returns either random generation of either aperture or wall
+	 * @param rand
+	 * @return boolean
+	 */
+	private CellComponents randomApertureOrWall(Random rand) {
+	    return rand.nextBoolean() ? CellComponents.APERTURE : CellComponents.WALL;
+	}
+	
+	/**
+	 * method to ensure that each cell has at least on aperture, no landlocked cells
+	 * @param cell
+	 * @return
+	 */
+	private boolean hasAtLeastOneAperture(Cell cell) {
+	    return cell.getLeft() == CellComponents.APERTURE ||
+	           cell.getRight() == CellComponents.APERTURE ||
+	           cell.getUp() == CellComponents.APERTURE ||
+	           cell.getDown() == CellComponents.APERTURE;
+	}
+	
+	/**
+	 * Method to ensure no cell contains only apertures, ensure some walls are included
+	 * @param cell
+	 * @return
+	 */
+	private boolean hasAllApertures(Cell cell) {
+	    return cell.getLeft() == CellComponents.APERTURE &&
+	           cell.getRight() == CellComponents.APERTURE &&
+	           cell.getUp() == CellComponents.APERTURE &&
+	           cell.getDown() == CellComponents.APERTURE;
 	}
 	
 	/**
@@ -128,7 +197,9 @@ public class Game {
 		return "Game [grid=" + grid + "]";
 	}
 	
-	//helper method providing grid updates and game status
+	/**
+	 * helper method that prints live updates of grid maze
+	 */
 	private static void printGrid(Game game) {
         Grid grid = game.getGrid();
         Player player = game.player;
@@ -159,6 +230,7 @@ public class Game {
 
         Movement[] moves = {
             Movement.UP,
+            Movement.LEFT,
             Movement.LEFT,
             Movement.LEFT,
             Movement.DOWN,
