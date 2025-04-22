@@ -123,6 +123,8 @@ class CellTest {
 		assertEquals(CellComponents.WALL, cell.getLeft());
 	}
 	
+	//this is a test comment
+	
 	@Test
 	void testSetRightWithValidCellComponent() {
 		Cell cell = new Cell(CellComponents.WALL, 
