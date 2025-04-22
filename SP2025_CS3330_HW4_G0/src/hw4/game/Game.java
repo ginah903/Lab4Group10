@@ -4,7 +4,7 @@ public class Game {
 	private Grid grid;
 	private Player player;
 	
-	//comnstructor to make grid
+	//constructor to make grid
 	public Game(Grid grid) {
 		this.grid = grid;
 	}
