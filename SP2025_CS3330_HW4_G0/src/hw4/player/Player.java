@@ -1,5 +1,8 @@
 package hw4.player;
 
+import hw4.maze.Cell;
+import hw4.maze.Row;
+
 public class Player {
 	private Row currentRow;
 	private Cell currentCell;
