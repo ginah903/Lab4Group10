@@ -1,5 +1,7 @@
 package hw4.game;
 
+import java.util.ArrayList;
+
 import hw4.maze.*;
 import hw4.player.*;
 
@@ -95,10 +97,27 @@ public class Game {
 			return null;
 		}
 		
-		Grid randomGrid = new Grid(size);
+		ArrayList<Row> rows = new ArrayList<>();
+		
+		for (int i = 0; i <size; i++) {
+			ArrayList<Cell> cells = new ArrayList<>();
+			for (int j = 0; j < size; j++) {
+				Cell cell = new Cell(
+					CellComponents.WALL,
+					CellComponents.WALL,
+					CellComponents.WALL,
+					CellComponents.WALL
+				);
+				cells.add(cell);		
+			}
+			Row row = new Row(cells);
+			rows.add(row);
+		}
+		
 		int randomExitRow = (int)(Math.random() * size);
-		randomGrid.getRows().get(randomExitRow).getCells().get(0).setLeft(CellComponents.EXIT);
-		return randomGrid;
+		rows.get(randomExitRow).getCells().get(0).setLeft(CellComponents.EXIT);
+		
+		return new Grid(rows);
 	}
 	
 	/**
@@ -106,6 +125,6 @@ public class Game {
 	 */
 	@Override
 	public String toString() {
-		return "Game [grid=" + grid = "]";
+		return "Game [grid=" + grid + "]";
 	}
 }
