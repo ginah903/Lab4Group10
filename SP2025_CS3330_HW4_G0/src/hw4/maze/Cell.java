@@ -70,7 +70,7 @@ public class Cell {
 			this.down = down;
 		}
 	}
-
+	
 	/**
 	 * Returns string representation of the Cell, prints out its
 	 * four components.

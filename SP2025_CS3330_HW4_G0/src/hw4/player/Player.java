@@ -30,6 +30,14 @@ public class Player {
         this.currentCell = currentCell;
     }
     
+   public int getCurrentRowIndex(Grid grid) {
+	   return grid.getRows().indexOf(currentRow);
+   }
+   
+   public int getCurrentCellIndex() {
+	   return currentRow.getCells().indexOf(currentCell);
+   }
+    
     /**
 	 * Returns a string representation of the Player, lists out all the rows and cells.
 	 */

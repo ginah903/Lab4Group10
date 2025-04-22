@@ -1,5 +1,8 @@
 package hw4.game;
 
+import hw4.maze.*;
+import hw4.player.*;
+
 public class Game {
 	private Grid grid;
 	private Player player;
@@ -26,49 +29,65 @@ public class Game {
 	
 	//player movement
 	public boolean play(Movement movement, Player player) {
-		if(movement == null || player == null) {
-			return false;
-		}
-		
-		Row currentRow = player.getCurrentRow();
-		Cell currentCell = player.getCurrentCell();
-		
-		switch(movement) {
-			case UP:
-				if(currentRow.getIndex() > 0 && currentCell.getUp() != CellComponents.WALL) {
-					Row newRow = grid.getRows().get(currentRow.getIndex() - 1);
-					Cell newCell = newRow.getCells().get(currentCell.getIndex());
-					player.setCurrentRow(newRow);
-					player.setCurrentCell(newCell);
-					return true;
-				}
-				break;
-			case RIGHT:
-				if(currentCell.getRight() != CellComponents.WALL) {
-					Cell newCell = currentRow.getCells().get(currentCell.getIndex() + 1);
-					player.setCurrentCell(newCell);
-					return true;
-				}
-				break;
-			case DOWN:
-				if(currentRow.getIndex() < grid.getRows().size() - 1 && currentCell.getDown() != CellComponents.WALL) {
-					Row newRow = grid.getRows().get(currentRow.getIndex() + 1);
-					Cell newCell = newRow.getCells().get(currentCell.getIndex());
-					player.setCurrentRow(newRow);
-					player.setCurrentCell(newCell);
-					return true;
-				}
-				break;
-			case LEFT:
-				if(currentCell.getLeft() != CellComponents.WALL) {
-					Cell newCell = currentRow.getCells().get(currentCell.getIndex() - 1);
-					player.setCurrentCell(newCell);
-					return true;
-				}
-				break;
-		}
-		return false;
+	    if (movement == null || player == null) {
+	        return false;
+	    }
+
+	    Row currentRow = player.getCurrentRow();
+	    Cell currentCell = player.getCurrentCell();
+
+	    int currentRowIndex = grid.getRows().indexOf(currentRow);
+	    int currentCellIndex = currentRow.getCells().indexOf(currentCell);
+
+	    switch (movement) {
+	        case UP:
+	            if (currentRowIndex > 0 && currentCell.getUp() != CellComponents.WALL) {
+	                Row newRow = grid.getRows().get(currentRowIndex - 1);
+	                Cell newCell = newRow.getCells().get(currentCellIndex);
+	                player.setCurrentRow(newRow);
+	                player.setCurrentCell(newCell);
+	                return true;
+	            }
+	            break;
+
+	        case RIGHT:
+	            if (currentCellIndex < currentRow.getCells().size() - 1 &&
+	                currentCell.getRight() != CellComponents.WALL) {
+	                Cell newCell = currentRow.getCells().get(currentCellIndex + 1);
+	                player.setCurrentCell(newCell);
+	                return true;
+	            }
+	            break;
+
+	        case DOWN:
+	            if (currentRowIndex < grid.getRows().size() - 1 &&
+	                currentCell.getDown() != CellComponents.WALL) {
+	                Row newRow = grid.getRows().get(currentRowIndex + 1);
+	                Cell newCell = newRow.getCells().get(currentCellIndex);
+	                player.setCurrentRow(newRow);
+	                player.setCurrentCell(newCell);
+	                return true;
+	            }
+	            break;
+
+	        case LEFT:
+	            // Check for exit escape
+	            if (currentCellIndex == 0 && currentCell.getLeft() == CellComponents.EXIT) {
+	                System.out.println("🎉 Agent escaped through the EXIT!");
+	                return true;
+	            }
+
+	            if (currentCellIndex > 0 && currentCell.getLeft() != CellComponents.WALL) {
+	                Cell newCell = currentRow.getCells().get(currentCellIndex - 1);
+	                player.setCurrentCell(newCell);
+	                return true;
+	            }
+	            break;
+	    }
+
+	    return false;
 	}
+
 	
 	//create a random grid between 3x3 and 7x7
 	public Grid createRandomGrid(int size) {
