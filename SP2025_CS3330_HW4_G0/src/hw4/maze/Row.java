@@ -1,28 +1,31 @@
 package hw4.maze;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Row {
-	private List<Cell> cells;
-	
+	private ArrayList<Cell> cells;
+
 	/**
 	 * Creates a Row with a given list of cells.
 	 * @param cells
 	 */
-	public Row(List<Cell> cells) {
+	public Row(ArrayList<Cell> cells) {
 		this.cells = cells;
 	}
-	
-	
+
 	// GETTERS AND SETTERS
-	public List<Cell> getCells() {
+
+	/**
+	 * Returns the list of cells in this row.
+	 * Changed return type from List<Cell> to ArrayList<Cell> 
+	 * for compatibility with test files that explicitly use ArrayList.
+	 */
+	public ArrayList<Cell> getCells() {
 		return cells;
 	}
-	
-	public void setCells(List<Cell> cells) {
+
+	public void setCells(ArrayList<Cell> cells) {
 		this.cells = cells;
-		
-		
 	}
 
 	/**
@@ -33,6 +36,4 @@ public class Row {
 	public String toString() {
 		return "Row [cells=" + cells + "]";
 	}
-	
-	
 }
