@@ -127,4 +127,63 @@ public class Game {
 	public String toString() {
 		return "Game [grid=" + grid + "]";
 	}
+	
+	//helper method providing grid updates and game status
+	private static void printGrid(Game game) {
+        Grid grid = game.getGrid();
+        Player player = game.player;
+
+        for (Row row : grid.getRows()) {
+            for (Cell cell : row.getCells()) {
+                if (player.getCurrentRow() == row && player.getCurrentCell() == cell) {
+                    System.out.print("A");
+                } else if (cell.getLeft() == CellComponents.EXIT) {
+                    System.out.print("E");
+                } else {
+                    System.out.print("S");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    /**
+     * Main method to run a test simulation of the application
+     */
+    public static void main(String[] args) {
+        Game game = new Game(3);
+
+        System.out.println("Starting Grid:");
+        printGrid(game);
+
+        Movement[] moves = {
+            Movement.UP,
+            Movement.LEFT,
+            Movement.LEFT,
+            Movement.DOWN,
+            Movement.RIGHT,
+            Movement.UP,
+            Movement.LEFT
+        };
+
+        for (Movement move : moves) {
+            System.out.println("Attempting agent move: " + move);
+            boolean result = game.play(move, game.player);
+
+            if (result) {
+                System.out.println("Agent moved successfully!.");
+            } else {
+                System.out.println("Agent was unable to move and got stuck.");
+            }
+
+            printGrid(game);
+        }
+
+        System.out.println("Gameplay test complete!");
+    }
+	
+	
 }
+
+
