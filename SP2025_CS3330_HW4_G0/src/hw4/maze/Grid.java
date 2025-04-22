@@ -1,5 +1,7 @@
 package hw4.maze;
 
+import java.util.List;
+
 public class Grid {
 	private List<Row> rows;
 	
