@@ -21,7 +21,7 @@ public class Game {
 		this.player = new Player(grid.getRows().get(2), grid.getRows().get(2).getCells().get(2)); //default starting position at (2,2)
 	}
 	
-	//GETTERS AND SETTERS
+	// GETTERS AND SETTERS
 	public Grid getGrid() {
 		return grid;
 	}
@@ -29,22 +29,46 @@ public class Game {
 	public void setGrid(Grid grid) {
 		this.grid = grid;
 	}
-	
-	//player movement
+
+	/**
+	 * Moves the provided player in the desired direction, returns true or false if successful. 
+	 * @param movement
+	 * @param player
+	 * @return Returns true if movement is successful, false if not.
+	 */
 	public boolean play(Movement movement, Player player) {
 	    if (movement == null || player == null) {
 	        return false;
 	    }
 
-	    Row currentRow = player.getCurrentRow();
-	    Cell currentCell = player.getCurrentCell();
+	    // resets indexes to -1
+	    int currentRowIndex = -1;
+	    int currentCellIndex = -1;
 
-	    int currentRowIndex = grid.getRows().indexOf(currentRow);
-	    int currentCellIndex = currentRow.getCells().indexOf(currentCell);
+	    for (int i = 0; i < grid.getRows().size(); i++) {
+	        if (grid.getRows().get(i) == player.getCurrentRow()) {
+	            currentRowIndex = i;
+	            ArrayList<Cell> cells = grid.getRows().get(i).getCells();
+	            for (int j = 0; j < cells.size(); j++) {
+	                if (cells.get(j) == player.getCurrentCell()) {
+	                    currentCellIndex = j;
+	                    break;
+	                }
+	            }
+	            break;
+	        }
+	    }
+
+	    if (currentRowIndex == -1 || currentCellIndex == -1) {
+	        return false; // Could not locate player
+	    }
+
+	    Row currentRow = grid.getRows().get(currentRowIndex);
+	    Cell currentCell = currentRow.getCells().get(currentCellIndex);
 
 	    switch (movement) {
 	        case UP:
-	            if (currentRowIndex > 0 && currentCell.getUp() != CellComponents.WALL) {
+	            if (currentRowIndex > 0 && currentCell.getUp() == CellComponents.APERTURE) {
 	                Row newRow = grid.getRows().get(currentRowIndex - 1);
 	                Cell newCell = newRow.getCells().get(currentCellIndex);
 	                player.setCurrentRow(newRow);
@@ -55,7 +79,7 @@ public class Game {
 
 	        case RIGHT:
 	            if (currentCellIndex < currentRow.getCells().size() - 1 &&
-	                currentCell.getRight() != CellComponents.WALL) {
+	                currentCell.getRight() == CellComponents.APERTURE) {
 	                Cell newCell = currentRow.getCells().get(currentCellIndex + 1);
 	                player.setCurrentCell(newCell);
 	                return true;
@@ -64,7 +88,7 @@ public class Game {
 
 	        case DOWN:
 	            if (currentRowIndex < grid.getRows().size() - 1 &&
-	                currentCell.getDown() != CellComponents.WALL) {
+	                currentCell.getDown() == CellComponents.APERTURE) {
 	                Row newRow = grid.getRows().get(currentRowIndex + 1);
 	                Cell newCell = newRow.getCells().get(currentCellIndex);
 	                player.setCurrentRow(newRow);
@@ -74,13 +98,10 @@ public class Game {
 	            break;
 
 	        case LEFT:
-	            // Check for exit escape
 	            if (currentCellIndex == 0 && currentCell.getLeft() == CellComponents.EXIT) {
-	                System.out.println("🎉 Agent escaped through the EXIT!");
 	                return true;
 	            }
-
-	            if (currentCellIndex > 0 && currentCell.getLeft() != CellComponents.WALL) {
+	            if (currentCellIndex > 0 && currentCell.getLeft() == CellComponents.APERTURE) {
 	                Cell newCell = currentRow.getCells().get(currentCellIndex - 1);
 	                player.setCurrentCell(newCell);
 	                return true;
@@ -92,17 +113,22 @@ public class Game {
 	}
 
 	
-	//create a random grid between 3x3 and 7x7
+	/**
+	 * Create a random grid between 3x3 and 7x7, return the Grid
+	 * @param size The desired size
+	 * @return The created grid
+	 */
 	public Grid createRandomGrid(int size) {
 		if(size < 3 || size > 7) {
 			return null;
 		}
 		
-		//randomg grid generator with internal error checking
+		//random grid generator with internal error checking
 		ArrayList<Row> rows = new ArrayList<>();
-		Random rand = new Random();
+		Random rand = new Random(202); // use fixed seed 
 		
 		int exitRow = rand.nextInt(size);
+		
 		
 		for (int i = 0; i <size; i++) {
 			ArrayList<Cell> cells = new ArrayList<>();
@@ -168,7 +194,7 @@ public class Game {
 	/**
 	 * method to ensure that each cell has at least on aperture, no landlocked cells
 	 * @param cell
-	 * @return
+	 * @return Returns true if there is at least one aperture.
 	 */
 	private boolean hasAtLeastOneAperture(Cell cell) {
 	    return cell.getLeft() == CellComponents.APERTURE ||
@@ -180,7 +206,7 @@ public class Game {
 	/**
 	 * Method to ensure no cell contains only apertures, ensure some walls are included
 	 * @param cell
-	 * @return
+	 * @return Returns true if cell has all apertures
 	 */
 	private boolean hasAllApertures(Cell cell) {
 	    return cell.getLeft() == CellComponents.APERTURE &&
@@ -257,5 +283,3 @@ public class Game {
 	
 	
 }
-
-
