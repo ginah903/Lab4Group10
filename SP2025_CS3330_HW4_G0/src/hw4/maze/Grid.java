@@ -13,7 +13,7 @@ public class Grid {
 		this.rows = rows;
 	}
 	
-	//GETTERS AND SETTERS
+	// GETTERS AND SETTERS
 	public List<Row> getRows(){
 		return rows;
 	}

@@ -13,17 +13,17 @@ public class Row {
 		this.cells = cells;
 	}
 
-	// GETTERS AND SETTERS
-
 	/**
-	 * Returns the list of cells in this row.
-	 * Changed return type from List<Cell> to ArrayList<Cell> 
-	 * for compatibility with test files that explicitly use ArrayList.
+	 * Returns the ArrayList of cells in this row.
 	 */
 	public ArrayList<Cell> getCells() {
 		return cells;
 	}
 
+	/**
+	 * Sets an ArrayList of cells.
+	 * @param cells
+	 */
 	public void setCells(ArrayList<Cell> cells) {
 		this.cells = cells;
 	}
@@ -36,4 +36,8 @@ public class Row {
 	public String toString() {
 		return "Row [cells=" + cells + "]";
 	}
+	
+
+	
+	
 }

@@ -7,13 +7,17 @@ public class Player {
 	private Cell currentCell;
 	
 	
-	//constructor for player
+	/**
+	 * Constructor for player given a row and cell.
+	 * @param currentRow The current row
+	 * @param currentCell The current cell
+	 */
 	public Player(Row currentRow, Cell currentCell) {
 		this.currentRow = currentRow;
 		this.currentCell = currentCell;
 	}
 	
-	//GETTERS AND SETTERS
+	// GETTERS AND SETTERS
 	public Row getCurrentRow() {
         return currentRow;
     }
